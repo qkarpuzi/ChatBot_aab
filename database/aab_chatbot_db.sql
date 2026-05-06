@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 05, 2026 at 02:31 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Host: localhost:3306
+-- Generation Time: May 06, 2026 at 08:28 AM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,75 +24,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admins`
+-- Table structure for table `adminet`
 --
 
-CREATE TABLE `admins` (
-  `admin_id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+CREATE TABLE `adminet` (
+  `id` int NOT NULL,
+  `perdoruesi` varchar(50) NOT NULL,
+  `fjalekalimi` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `krijuar_me` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Table structure for table `bisedat`
 --
 
-CREATE TABLE `categories` (
-  `category_id` int(11) NOT NULL,
-  `category_name` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `chat_messages`
---
-
-CREATE TABLE `chat_messages` (
-  `message_id` int(11) NOT NULL,
-  `user_question` text NOT NULL,
-  `bot_response` text NOT NULL,
-  `matched_type` varchar(50) DEFAULT NULL,
-  `matched_location_id` int(11) DEFAULT NULL,
-  `matched_faq_id` int(11) DEFAULT NULL,
-  `default_response_id` int(11) DEFAULT NULL,
-  `confidence_score` float DEFAULT NULL,
-  `is_successful` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `default_responses`
---
-
-CREATE TABLE `default_responses` (
-  `default_response_id` int(11) NOT NULL,
-  `response_text` text NOT NULL,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `directions`
---
-
-CREATE TABLE `directions` (
-  `direction_id` int(11) NOT NULL,
-  `from_location_id` int(11) NOT NULL,
-  `to_location_id` int(11) NOT NULL,
-  `instruction` text NOT NULL,
-  `distance_description` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `bisedat` (
+  `id` int NOT NULL,
+  `pyetje_user` text NOT NULL,
+  `pergjigje_bot` text NOT NULL,
+  `vendi_id` int DEFAULT NULL,
+  `faq_id` int DEFAULT NULL,
+  `default_id` int DEFAULT NULL,
+  `saktesia` float DEFAULT NULL,
+  `koha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -101,221 +59,229 @@ CREATE TABLE `directions` (
 --
 
 CREATE TABLE `faq` (
-  `faq_id` int(11) NOT NULL,
-  `question` text NOT NULL,
-  `answer` text NOT NULL,
-  `category_id` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int NOT NULL,
+  `pyetja` text NOT NULL,
+  `pergjigjja` text NOT NULL,
+  `kategori_id` int DEFAULT NULL,
+  `aktiv` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `faq_keywords`
+-- Table structure for table `fjalet_kyce`
 --
 
-CREATE TABLE `faq_keywords` (
-  `faq_keyword_id` int(11) NOT NULL,
-  `keyword` varchar(100) NOT NULL,
-  `faq_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `fjalet_kyce` (
+  `id` int NOT NULL,
+  `fjala` varchar(100) NOT NULL,
+  `lloji` varchar(50) NOT NULL,
+  `vendi_id` int DEFAULT NULL,
+  `faq_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `keywords`
+-- Table structure for table `kategorite`
 --
 
-CREATE TABLE `keywords` (
-  `keyword_id` int(11) NOT NULL,
-  `keyword` varchar(100) NOT NULL,
-  `intent_type` varchar(50) NOT NULL,
-  `location_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `kategorite` (
+  `id` int NOT NULL,
+  `emri` varchar(100) NOT NULL,
+  `pershkrimi` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `locations`
+-- Table structure for table `pergjigjet_default`
 --
 
-CREATE TABLE `locations` (
-  `location_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
-  `building` varchar(50) DEFAULT NULL,
-  `floor` int(11) DEFAULT NULL,
-  `room_number` varchar(20) DEFAULT NULL,
-  `x_coord` float DEFAULT NULL,
-  `y_coord` float DEFAULT NULL,
-  `map_link` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `pergjigjet_default` (
+  `id` int NOT NULL,
+  `teksti` text NOT NULL,
+  `aktiv` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `udhezimet`
+--
+
+CREATE TABLE `udhezimet` (
+  `id` int NOT NULL,
+  `nga_id` int NOT NULL,
+  `tek_id` int NOT NULL,
+  `instruksioni` text NOT NULL,
+  `distanca` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendndodhjet`
+--
+
+CREATE TABLE `vendndodhjet` (
+  `id` int NOT NULL,
+  `emri` varchar(100) NOT NULL,
+  `pershkrimi` text,
+  `ndertesa` varchar(50) DEFAULT NULL,
+  `kati` int DEFAULT NULL,
+  `dhoma` varchar(20) DEFAULT NULL,
+  `x` float DEFAULT NULL,
+  `y` float DEFAULT NULL,
+  `link_harta` varchar(255) DEFAULT NULL,
+  `aktiv` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `admins`
+-- Indexes for table `adminet`
 --
-ALTER TABLE `admins`
-  ADD PRIMARY KEY (`admin_id`),
-  ADD UNIQUE KEY `username` (`username`),
+ALTER TABLE `adminet`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `perdoruesi` (`perdoruesi`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `categories`
+-- Indexes for table `bisedat`
 --
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`category_id`);
-
---
--- Indexes for table `chat_messages`
---
-ALTER TABLE `chat_messages`
-  ADD PRIMARY KEY (`message_id`),
-  ADD KEY `matched_location_id` (`matched_location_id`),
-  ADD KEY `matched_faq_id` (`matched_faq_id`),
-  ADD KEY `default_response_id` (`default_response_id`);
-
---
--- Indexes for table `default_responses`
---
-ALTER TABLE `default_responses`
-  ADD PRIMARY KEY (`default_response_id`);
-
---
--- Indexes for table `directions`
---
-ALTER TABLE `directions`
-  ADD PRIMARY KEY (`direction_id`),
-  ADD KEY `from_location_id` (`from_location_id`),
-  ADD KEY `to_location_id` (`to_location_id`);
+ALTER TABLE `bisedat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_log_vendi` (`vendi_id`),
+  ADD KEY `fk_log_faq` (`faq_id`),
+  ADD KEY `fk_log_default` (`default_id`);
 
 --
 -- Indexes for table `faq`
 --
 ALTER TABLE `faq`
-  ADD PRIMARY KEY (`faq_id`),
-  ADD KEY `category_id` (`category_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_faq_kategori` (`kategori_id`);
 
 --
--- Indexes for table `faq_keywords`
+-- Indexes for table `fjalet_kyce`
 --
-ALTER TABLE `faq_keywords`
-  ADD PRIMARY KEY (`faq_keyword_id`),
-  ADD KEY `faq_id` (`faq_id`);
+ALTER TABLE `fjalet_kyce`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_kyce_vendi` (`vendi_id`),
+  ADD KEY `fk_kyce_faq` (`faq_id`);
 
 --
--- Indexes for table `keywords`
+-- Indexes for table `kategorite`
 --
-ALTER TABLE `keywords`
-  ADD PRIMARY KEY (`keyword_id`),
-  ADD KEY `location_id` (`location_id`);
+ALTER TABLE `kategorite`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `locations`
+-- Indexes for table `pergjigjet_default`
 --
-ALTER TABLE `locations`
-  ADD PRIMARY KEY (`location_id`);
+ALTER TABLE `pergjigjet_default`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `udhezimet`
+--
+ALTER TABLE `udhezimet`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_nga` (`nga_id`),
+  ADD KEY `fk_tek` (`tek_id`);
+
+--
+-- Indexes for table `vendndodhjet`
+--
+ALTER TABLE `vendndodhjet`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `admins`
+-- AUTO_INCREMENT for table `adminet`
 --
-ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `adminet`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT for table `bisedat`
 --
-ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `chat_messages`
---
-ALTER TABLE `chat_messages`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `default_responses`
---
-ALTER TABLE `default_responses`
-  MODIFY `default_response_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `directions`
---
-ALTER TABLE `directions`
-  MODIFY `direction_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `bisedat`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `faq`
 --
 ALTER TABLE `faq`
-  MODIFY `faq_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `faq_keywords`
+-- AUTO_INCREMENT for table `fjalet_kyce`
 --
-ALTER TABLE `faq_keywords`
-  MODIFY `faq_keyword_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `fjalet_kyce`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `keywords`
+-- AUTO_INCREMENT for table `kategorite`
 --
-ALTER TABLE `keywords`
-  MODIFY `keyword_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `kategorite`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `locations`
+-- AUTO_INCREMENT for table `pergjigjet_default`
 --
-ALTER TABLE `locations`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pergjigjet_default`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `udhezimet`
+--
+ALTER TABLE `udhezimet`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vendndodhjet`
+--
+ALTER TABLE `vendndodhjet`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `chat_messages`
+-- Constraints for table `bisedat`
 --
-ALTER TABLE `chat_messages`
-  ADD CONSTRAINT `chat_messages_ibfk_1` FOREIGN KEY (`matched_location_id`) REFERENCES `locations` (`location_id`),
-  ADD CONSTRAINT `chat_messages_ibfk_2` FOREIGN KEY (`matched_faq_id`) REFERENCES `faq` (`faq_id`),
-  ADD CONSTRAINT `chat_messages_ibfk_3` FOREIGN KEY (`default_response_id`) REFERENCES `default_responses` (`default_response_id`);
-
---
--- Constraints for table `directions`
---
-ALTER TABLE `directions`
-  ADD CONSTRAINT `directions_ibfk_1` FOREIGN KEY (`from_location_id`) REFERENCES `locations` (`location_id`),
-  ADD CONSTRAINT `directions_ibfk_2` FOREIGN KEY (`to_location_id`) REFERENCES `locations` (`location_id`);
+ALTER TABLE `bisedat`
+  ADD CONSTRAINT `fk_log_default` FOREIGN KEY (`default_id`) REFERENCES `pergjigjet_default` (`id`),
+  ADD CONSTRAINT `fk_log_faq` FOREIGN KEY (`faq_id`) REFERENCES `faq` (`id`),
+  ADD CONSTRAINT `fk_log_vendi` FOREIGN KEY (`vendi_id`) REFERENCES `vendndodhjet` (`id`);
 
 --
 -- Constraints for table `faq`
 --
 ALTER TABLE `faq`
-  ADD CONSTRAINT `faq_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
+  ADD CONSTRAINT `fk_faq_kategori` FOREIGN KEY (`kategori_id`) REFERENCES `kategorite` (`id`);
 
 --
--- Constraints for table `faq_keywords`
+-- Constraints for table `fjalet_kyce`
 --
-ALTER TABLE `faq_keywords`
-  ADD CONSTRAINT `faq_keywords_ibfk_1` FOREIGN KEY (`faq_id`) REFERENCES `faq` (`faq_id`);
+ALTER TABLE `fjalet_kyce`
+  ADD CONSTRAINT `fk_kyce_faq` FOREIGN KEY (`faq_id`) REFERENCES `faq` (`id`),
+  ADD CONSTRAINT `fk_kyce_vendi` FOREIGN KEY (`vendi_id`) REFERENCES `vendndodhjet` (`id`);
 
 --
--- Constraints for table `keywords`
+-- Constraints for table `udhezimet`
 --
-ALTER TABLE `keywords`
-  ADD CONSTRAINT `keywords_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`);
+ALTER TABLE `udhezimet`
+  ADD CONSTRAINT `fk_nga` FOREIGN KEY (`nga_id`) REFERENCES `vendndodhjet` (`id`),
+  ADD CONSTRAINT `fk_tek` FOREIGN KEY (`tek_id`) REFERENCES `vendndodhjet` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
