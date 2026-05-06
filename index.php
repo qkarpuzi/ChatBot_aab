@@ -1,5 +1,5 @@
 <?php
-include "chatbot.php";
+include "./database/db.php";
 
 $response = "";
 
