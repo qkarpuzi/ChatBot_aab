@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db   = 'aab_chatbot_db'; 
 $user = 'root'; 
-$pass = '';     
+$pass = '1234';     
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
