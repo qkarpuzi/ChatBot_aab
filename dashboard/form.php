@@ -41,7 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO $table ($colsString) VALUES ($placeholders)";
         $pdo->prepare($sql)->execute($values);
     }
-
+if ($name == 'faq_id') {
+    // Merr të gjitha pyetjet nga tabela faq
+    $stmt = $pdo->query("SELECT faq_id, question FROM faq");
+    $faqs = $stmt->fetchAll();
+    
+    echo '<select name="data[' . $name . ']" class="form-select" required>';
+    echo '<option value="">-- Zgjidh Pyetjen --</option>';
+    foreach ($faqs as $f) {
+        $selected = ($val == $f['faq_id']) ? 'selected' : '';
+        echo '<option value="' . $f['faq_id'] . '" ' . $selected . '>' . $f['faq_id'] . ' - ' . $f['question'] . '</option>';
+    }
+    echo '</select>';
+}
     header("Location: index.php?table=$table");
     exit;
 }
