@@ -1,6 +1,6 @@
-<?php 
+<?php
 $host = 'localhost';
-$db   = 'aab_chatbot_db'; // Ndryshoje me emrin e databazës tënde
+$db   = 'aab_chatbot_db'; 
 $user = 'root'; 
 $pass = '';     
 $charset = 'utf8mb4';
@@ -14,17 +14,19 @@ $options = [
 
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
+     // Heqim "Strict Mode" për të shmangur gabimin 'Data truncated'
+     $pdo->exec("SET sql_mode=''");
 } catch (\PDOException $e) {
      die("Gabim në lidhje: " . $e->getMessage());
 }
 
-// KJO ËSHTË PJESA QË MUNGON DHE SHKAKTON GABIMIN
-// Funksion për të gjetur çelësin primar (Primary Key) të tabelës
-if (!function_exists('getPrimaryKey')) {
-    function getPrimaryKey($pdo, $table) {
-        $stmt = $pdo->query("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
+function getPrimaryKey($pdo, $table) {
+    try {
+        $stmt = $pdo->query("SHOW KEYS FROM `$table` WHERE Key_name = 'PRIMARY'");
         $result = $stmt->fetch();
         return $result['Column_name'] ?? 'id';
+    } catch (Exception $e) {
+        return 'id';
     }
 }
 ?>
